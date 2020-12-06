@@ -1,0 +1,10 @@
+{
+
+    "GOOGLE_APP":"Your path to google cloud API key.json", 
+    "IP_port": "0.0.0.0",
+    "port":"5023",
+    "labelsPath":"obj.names",
+    "cfgpath":"yolo-obj.cfg",
+    "wpath":"yolo-obj_final_vehicle.weights"
+  
+  }
