@@ -3,11 +3,10 @@ import argparse
 import time
 import cv2
 import os
-from google.cloud import vision
-from google.cloud.vision_v1 import types
+import json
 from PIL import Image
 import io
-# import pytesseract
+import pytesseract
 
 confthres=0.5
 nmsthres=0.1
@@ -92,19 +91,7 @@ class License_plate():
                 cv2.putText(image, text, (x, y - 5), cv2.FONT_HERSHEY_SIMPLEX,0.5, [int(c) for c in COLORS[classIDs[i]]], 2)
         return image,subImg
 
-    def google(self,content):
-        try:
-            client = vision.ImageAnnotatorClient()
-            image = types.Image(content=content)
-            # Performs label detection on the image file
-            response = client.text_detection(image=image,image_context={"language_hints": ["en"]})
-            labels = response.text_annotations[0].description
-            print(labels)
-            return labels
-        except Exception as e:
-            labels='Not Detected'
-            return labels
-
+    
     def main(self,image_path):
         image = cv2.imread(image_path)
         detected_image,croped_image=self.get_predection(image,self.nets,self.Lables,self.Colors)
@@ -117,16 +104,17 @@ class License_plate():
         elif ext.lower() in ('jpg', 'jpeg'):
             save_ext = 'JPEG'
         pilImage.save(b, save_ext) 
-        text = self.google(b.getvalue())
-        # cv2.imshow("croped_image", croped_image)
-        # cv2.imwrite("a11.jpg",croped_image)
-        # cv2.waitKey()
-        # text = pytesseract.image_to_string(pilImage, lang = 'eng')
+        
+        text = pytesseract.image_to_string(pilImage, lang = 'eng')
         return detected_image,text
 
 
 if __name__ == "__main__":
-    lp=License_plate()
+
+    with open('config.json') as data_file:
+        cred = json.load(data_file)
+
+    lp=License_plate(cred['labelsPath'],cred['cfgpath'],cred['wpath'])
     path="static/a11.jpg"
     image,text=lp.main(path)
     print(text)

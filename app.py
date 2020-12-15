@@ -15,7 +15,6 @@ with open('config.json') as data_file:
 lp=License_plate(cred['labelsPath'],cred['cfgpath'],cred['wpath'])
 port = cred['port']
 local_ip = cred['IP_port']
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"]=cred['GOOGLE_APP'] #Your path to google cloud API key.json
 @app.route('/')
 def index():
     return render_template('index.html')
