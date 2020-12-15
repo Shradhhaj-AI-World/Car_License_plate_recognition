@@ -1,7 +1,5 @@
 Flask==1.0.3
 Flask-RESTful==0.3.7
-Werkzeug==0.15.2
-gunicorn==19.9.0
 opencv-python
 numpy==1.17.4
 pillow
